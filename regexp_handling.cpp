@@ -148,6 +148,8 @@ bool recursive(int recursive_var, const vector<int>& inf_part, int required, vec
         }
         return (sum == required);
     }
+    if (!inf_part[recursive_var])
+        return false;
     for (int i = 0; i * inf_part[recursive_var] < required; ++i) {
         iterators.push_back(i);
         if (recursive(recursive_var + 1, inf_part, required, iterators))
