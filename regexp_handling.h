@@ -40,7 +40,7 @@ vector<int> operator+ (const vector<int>& left_v, const vector<int>& right_v);
 
 int apply_operation(char symbol, stack<string>& unhandled_expressions, stack<unordered_set<inf_int>>& occurrences_of_required_letter);
 
-bool recursive(int recursive_var, const vector<int>& inf_part, int required, vector<int> iterators);
+bool recursive_finding_linear_comb(int recursive_var, const vector<int>& inf_part, int required, vector<int> iterators);
 
 string counting_answer(char required_letter, int number_required_of_occurences, unordered_set<inf_int>& occurrences_of_required_letter);
 

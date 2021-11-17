@@ -140,7 +140,7 @@ int apply_operation(char symbol, stack<string>& unhandled_expressions, stack<uno
     return 0;
 }
 
-bool recursive(int recursive_var, const vector<int>& inf_part, int required, vector<int> iterators) {
+bool recursive_finding_linear_comb(int recursive_var, const vector<int>& inf_part, int required, vector<int> iterators) {
     if (recursive_var == inf_part.size()) {
         int sum = 0;
         for (int j = 0; j < recursive_var; ++j) {
@@ -153,7 +153,7 @@ bool recursive(int recursive_var, const vector<int>& inf_part, int required, vec
     }
     for (int i = 0; i * inf_part[recursive_var] < required; ++i) {
         iterators.push_back(i);
-        if (recursive(recursive_var + 1, inf_part, required, iterators))
+        if (recursive_finding_linear_comb(recursive_var + 1, inf_part, required, iterators))
             return true;
         iterators.pop_back();
     }
@@ -169,7 +169,7 @@ string counting_answer(char required_letter, int number_required_of_occurences, 
     int remainder;
     for (const auto& elem : occurrences_of_required_letter) {
         remainder = number_required_of_occurences - elem.number;
-        if (recursive(0, elem.infinity_part, remainder, vector<int>())) {
+        if (recursive_finding_linear_comb(0, elem.infinity_part, remainder, vector<int>())) {
             return POSITIVE_ANSWER;
         }
     }
