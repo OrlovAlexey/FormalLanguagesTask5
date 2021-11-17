@@ -148,8 +148,9 @@ bool recursive(int recursive_var, const vector<int>& inf_part, int required, vec
         }
         return (sum == required);
     }
-    if (!inf_part[recursive_var])
+    if (!inf_part[recursive_var]) {
         return false;
+    }
     for (int i = 0; i * inf_part[recursive_var] < required; ++i) {
         iterators.push_back(i);
         if (recursive(recursive_var + 1, inf_part, required, iterators))
@@ -197,12 +198,12 @@ string common_part_in_main_algorithm(const string& regular_expression, char requ
             if (is_operation(symbol)) {
                 // checking for a valid input
                 if (!valid(symbol, unhandled_expressions.size())) {
-                    throw 1;
+                    throw std::invalid_argument("not a valid input");
                 }
                 apply_operation(symbol, unhandled_expressions, occurrences_of_required_letter);
             }
             else {
-                throw 3; //symbol not found
+                throw std::invalid_argument("symbol not found");
             }
         }
     }
@@ -213,10 +214,10 @@ string common_part_in_main_algorithm(const string& regular_expression, char requ
         occurrences_of_required_letter.pop();
     }
     else {
-        throw 2; // runtime-error
+        throw std::invalid_argument("runtime-error (broken stack)");
     }
     if (!unhandled_expressions.empty()) {
-        throw 1; // not a valid input
+        throw std::invalid_argument("not a valid input");
     }
     return answer;
 }
