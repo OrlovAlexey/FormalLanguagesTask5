@@ -65,6 +65,14 @@ vector<int> operator+ (const vector<int>& left_v, const vector<int>& right_v) {
     return result;
 }
 
+template <typename T>
+void initializing_operands(string& operand, stack<T>& unhandled_expressions, unordered_set<inf_int>& number_of_occurences_in_operand, stack<unordered_set<inf_int>>& occurrences_of_required_letter) {
+    operand = std::move(unhandled_expressions.top());
+    unhandled_expressions.pop();
+    number_of_occurences_in_operand = std::move(occurrences_of_required_letter.top());
+    occurrences_of_required_letter.pop();
+}
+
 int apply_operation(char symbol, stack<string>& unhandled_expressions, stack<unordered_set<inf_int>>& occurrences_of_required_letter) {
     string left_operand, right_operand;
     unordered_set<inf_int> number_of_occurences_in_left, number_of_occurences_in_right, new_number_of_occurences;
@@ -72,14 +80,8 @@ int apply_operation(char symbol, stack<string>& unhandled_expressions, stack<uno
         case '.': // 1-st operation
 
             // getting elements from stack
-            right_operand = std::move(unhandled_expressions.top());
-            unhandled_expressions.pop();
-            left_operand = std::move(unhandled_expressions.top());
-            unhandled_expressions.pop();
-            number_of_occurences_in_left = std::move(occurrences_of_required_letter.top());
-            occurrences_of_required_letter.pop();
-            number_of_occurences_in_right = std::move(occurrences_of_required_letter.top());
-            occurrences_of_required_letter.pop();
+            initializing_operands(right_operand, unhandled_expressions, number_of_occurences_in_right, occurrences_of_required_letter);
+            initializing_operands(left_operand, unhandled_expressions, number_of_occurences_in_left, occurrences_of_required_letter);
 
             // occurrences_recounting
             for (auto elem1 : number_of_occurences_in_left) {
@@ -95,14 +97,8 @@ int apply_operation(char symbol, stack<string>& unhandled_expressions, stack<uno
         case '+': // 2-nd operation
 
             // getting elements from stack
-            right_operand = std::move(unhandled_expressions.top());
-            unhandled_expressions.pop();
-            left_operand = std::move(unhandled_expressions.top());
-            unhandled_expressions.pop();
-            number_of_occurences_in_left = std::move(occurrences_of_required_letter.top());
-            occurrences_of_required_letter.pop();
-            number_of_occurences_in_right = std::move(occurrences_of_required_letter.top());
-            occurrences_of_required_letter.pop();
+            initializing_operands(right_operand, unhandled_expressions, number_of_occurences_in_right, occurrences_of_required_letter);
+            initializing_operands(left_operand, unhandled_expressions, number_of_occurences_in_left, occurrences_of_required_letter);
 
             // occurrences_recounting
             for (auto elem : number_of_occurences_in_left) {
@@ -119,10 +115,7 @@ int apply_operation(char symbol, stack<string>& unhandled_expressions, stack<uno
         case '*': // 3-rd operation
 
             // getting elements from stack
-            left_operand = std::move(unhandled_expressions.top());
-            unhandled_expressions.pop();
-            number_of_occurences_in_left = std::move(occurrences_of_required_letter.top());
-            occurrences_of_required_letter.pop();
+            initializing_operands(left_operand, unhandled_expressions, number_of_occurences_in_left, occurrences_of_required_letter);
 
             // occurrences_recounting
             vector<int> temp;

@@ -38,6 +38,9 @@ public:
 
 vector<int> operator+ (const vector<int>& left_v, const vector<int>& right_v);
 
+template <typename T>
+void initializing_operands(string& operand, stack<T>& unhandled_expressions, unordered_set<inf_int>& number_of_occurences_in_operand, stack<unordered_set<inf_int>>& occurrences_of_required_letter);
+
 int apply_operation(char symbol, stack<string>& unhandled_expressions, stack<unordered_set<inf_int>>& occurrences_of_required_letter);
 
 bool recursive_finding_linear_comb(int recursive_var, const vector<int>& inf_part, int required, vector<int> iterators);
