@@ -44,7 +44,6 @@ bool is_operation(char symbol) {
 
 inf_int::inf_int(int number, const vector<int> &infinity_part): number(number), infinity_part(infinity_part) {}
 
-
 bool operator==(const inf_int& left, const inf_int& right) {
     return (left.number == right.number && left.infinity_part == right.infinity_part);
 }
@@ -54,7 +53,7 @@ size_t std::hash<inf_int>::operator()(const inf_int& inf_int1) const {
     for (int i : inf_int1.infinity_part) {
         hash ^= std::hash<int>()(i);
     }
-    return  hash;
+    return hash;
 }
 
 vector<int> operator+ (const vector<int>& left_v, const vector<int>& right_v) {
@@ -67,6 +66,9 @@ vector<int> operator+ (const vector<int>& left_v, const vector<int>& right_v) {
 
 template <typename T>
 void initializing_operands(string& operand, stack<T>& unhandled_expressions, unordered_set<inf_int>& number_of_occurences_in_operand, stack<unordered_set<inf_int>>& occurrences_of_required_letter) {
+    if (unhandled_expressions.empty() || occurrences_of_required_letter.empty()) {
+        throw std::invalid_argument("runtime-error (broken stack)");
+    }
     operand = std::move(unhandled_expressions.top());
     unhandled_expressions.pop();
     number_of_occurences_in_operand = std::move(occurrences_of_required_letter.top());
@@ -109,7 +111,7 @@ int apply_operation(char symbol, stack<string>& unhandled_expressions, stack<uno
             }
 
             // pushing on stack
-            unhandled_expressions.push(left_operand + '+' + right_operand);
+            unhandled_expressions.push("(" + left_operand + '+' + right_operand + ")");
             occurrences_of_required_letter.push(std::move(new_number_of_occurences));
             break;
         case '*': // 3-rd operation
@@ -126,7 +128,7 @@ int apply_operation(char symbol, stack<string>& unhandled_expressions, stack<uno
             }
 
             // pushing on stack
-            unhandled_expressions.push(left_operand + '*');
+            unhandled_expressions.push("(" + left_operand + ")*");
             occurrences_of_required_letter.push(std::move(new_number_of_occurences));
             break;
     }
@@ -144,7 +146,7 @@ bool recursive_finding_linear_comb(int recursive_var, const vector<int>& inf_par
     if (!inf_part[recursive_var]) {
         return false;
     }
-    for (int i = 0; i * inf_part[recursive_var] < required; ++i) {
+    for (int i = 0; i * inf_part[recursive_var] <= required; ++i) {
         iterators.push_back(i);
         if (recursive_finding_linear_comb(recursive_var + 1, inf_part, required, iterators))
             return true;
@@ -169,7 +171,7 @@ string counting_answer(char required_letter, int number_required_of_occurences, 
     return NEGATIVE_ANSWER;
 }
 
-bool valid(char symbol, int stack_size) {
+bool is_valid(char symbol, int stack_size) {
     if (symbol == OPERATIONS[2] && stack_size < 1) {
         return false;
     }
@@ -189,9 +191,9 @@ string common_part_in_main_algorithm(const string& regular_expression, char requ
         }
         else {
             if (is_operation(symbol)) {
-                // checking for a valid input
-                if (!valid(symbol, unhandled_expressions.size())) {
-                    throw std::invalid_argument("not a valid input");
+                // checking for a is_valid input
+                if (!is_valid(symbol, unhandled_expressions.size())) {
+                    throw std::invalid_argument("not a is_valid input");
                 }
                 apply_operation(symbol, unhandled_expressions, occurrences_of_required_letter);
             }
@@ -210,7 +212,7 @@ string common_part_in_main_algorithm(const string& regular_expression, char requ
         throw std::invalid_argument("runtime-error (broken stack)");
     }
     if (!unhandled_expressions.empty()) {
-        throw std::invalid_argument("not a valid input");
+        throw std::invalid_argument("not a is_valid input");
     }
     return answer;
 }

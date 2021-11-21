@@ -25,7 +25,8 @@ bool is_operation(char symbol);
 struct inf_int {
     int number;
     vector<int> infinity_part;
-    inf_int(int number, const vector<int>& infinity_part);
+    inf_int() = default;
+    inf_int(int number, const vector<int>& infinity_part = vector<int>());
 };
 
 bool operator==(const inf_int& left, const inf_int& right);
@@ -47,7 +48,7 @@ bool recursive_finding_linear_comb(int recursive_var, const vector<int>& inf_par
 
 string counting_answer(char required_letter, int number_required_of_occurences, unordered_set<inf_int>& occurrences_of_required_letter);
 
-bool valid(char symbol, int stack_size);
+bool is_valid(char symbol, int stack_size);
 
 string common_part_in_main_algorithm(const string& regular_expression, char required_letter, int number_required_of_occurences);
 
